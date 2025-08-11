@@ -10,6 +10,8 @@ export class PlayerDto {
   dribbling: number;
   passing: number;
 
+  radar?: { label: string; value: number }[];
+
   constructor(partial: Partial<PlayerDto>) {
     Object.assign(this, partial);
   }
