@@ -12,6 +12,7 @@ export interface Player {
   shooting: number;
   dribbling: number;
   passing: number;
+  radar?: { label: string; value: number }[];
 }
 
 export interface Paged<T> {
@@ -34,6 +35,7 @@ export class PlayersService {
     maxRating?: number;
     minSpeed?: number;
     maxSpeed?: number;
+    sort?: string;
   }) {
     let httpParams = new HttpParams();
     Object.entries(params).forEach(([k, v]) => {
@@ -42,4 +44,9 @@ export class PlayersService {
 
     return this.http.get<Paged<Player>>('/api/players', { params: httpParams });
   }
+
+  get(id: number) {
+    return this.http.get<Player>(`/api/players/${id}`);
+  }
+  
 }

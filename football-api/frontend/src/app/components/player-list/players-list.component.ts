@@ -4,13 +4,15 @@ import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { debounceTime, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { PlayersService, Player, Paged } from '../../services/players.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-players-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule],
   templateUrl: './players-list.component.html',
 })
+
 export class PlayersListComponent implements OnInit, OnDestroy {
   data: Player[] = [];
   total = 0;
@@ -18,20 +20,22 @@ export class PlayersListComponent implements OnInit, OnDestroy {
   limit = 10;
   loading = false;
 
-  form = this.fb.group({
-    name: [''],
-    club: [''],
-    nationality: [''],
-    position: [''],
-    minRating: [''],
-    maxRating: [''],
-    minSpeed: [''],
-    maxSpeed: [''],
-  });
-
   private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private players: PlayersService) {}
+  form!: ReturnType<FormBuilder['group']>;
+
+  constructor(private fb: FormBuilder, private players: PlayersService) {
+      this.form = this.fb.group({
+      name: [''],
+      club: [''],
+      nationality: [''],
+      position: [''],
+      minRating: [''],
+      maxRating: [''],
+      minSpeed: [''],
+      maxSpeed: [''],
+    });
+  }
 
   ngOnInit(): void {
     this.form.valueChanges
@@ -49,6 +53,7 @@ export class PlayersListComponent implements OnInit, OnDestroy {
   fetch() {
     this.loading = true;
     const v = this.form.value;
+
     return this.players
       .list({
         page: this.page,
@@ -61,6 +66,7 @@ export class PlayersListComponent implements OnInit, OnDestroy {
         maxRating: v.maxRating ? Number(v.maxRating) : undefined,
         minSpeed: v.minSpeed ? Number(v.minSpeed) : undefined,
         maxSpeed: v.maxSpeed ? Number(v.maxSpeed) : undefined,
+        sort: this.sort,
       })
       .pipe(
         tap((res: Paged<Player>) => {
@@ -90,4 +96,23 @@ export class PlayersListComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  get totalPages(): number {
+  return Math.max(1, Math.ceil(this.total / this.limit));
+  }
+
+  sort?: string; // ejemplos: 'name' | '-rating' | 'name,-rating'
+
+  toggleSort(field: 'name' | 'club' | 'nationality' | 'position' | 'rating' | 'speed') {
+    if (!this.sort || !this.sort.includes(field)) {
+      this.sort = field;           // asc
+    } else if (this.sort === field) {
+      this.sort = `-${field}`;     // desc
+    } else {
+      this.sort = undefined;       // sin orden
+    }
+    this.page = 1;
+    this.fetch().subscribe();
+  }
+
 }

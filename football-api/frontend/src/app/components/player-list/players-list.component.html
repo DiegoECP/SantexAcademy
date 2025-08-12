@@ -22,19 +22,48 @@
     <table style="width:100%; border-collapse:collapse;">
       <thead>
         <tr>
-          <th style="text-align:left; border-bottom:1px solid #ddd;">#</th>
-          <th style="text-align:left; border-bottom:1px solid #ddd;">Nombre</th>
-          <th style="text-align:left; border-bottom:1px solid #ddd;">Club</th>
-          <th style="text-align:left; border-bottom:1px solid #ddd;">Posición</th>
-          <th style="text-align:left; border-bottom:1px solid #ddd;">Nacionalidad</th>
-          <th style="text-align:left; border-bottom:1px solid #ddd;">Rating</th>
-          <th style="text-align:left; border-bottom:1px solid #ddd;">Speed</th>
+          <th>#</th>
+
+          <th (click)="toggleSort('name')" style="cursor:pointer; user-select:none;">
+            Nombre
+            <span *ngIf="sort?.includes('name')">{{ sort === 'name' ? '▲' : '▼' }}</span>
+          </th>
+
+          <th (click)="toggleSort('club')" style="cursor:pointer; user-select:none;">
+            Club
+            <span *ngIf="sort?.includes('club')">{{ sort === 'club' ? '▲' : '▼' }}</span>
+          </th>
+
+          <th (click)="toggleSort('position')" style="cursor:pointer; user-select:none;">
+            Posición
+            <span *ngIf="sort?.includes('position')">{{ sort === 'position' ? '▲' : '▼' }}</span>
+          </th>
+
+          <th (click)="toggleSort('nationality')" style="cursor:pointer; user-select:none;">
+            Nacionalidad
+            <span *ngIf="sort?.includes('nationality')">{{ sort === 'nationality' ? '▲' : '▼' }}</span>
+          </th>
+
+          <th (click)="toggleSort('rating')" style="cursor:pointer; user-select:none;">
+            Rating
+            <span *ngIf="sort?.includes('rating')">{{ sort === 'rating' ? '▲' : '▼' }}</span>
+          </th>
+
+          <th (click)="toggleSort('speed')" style="cursor:pointer; user-select:none;">
+            Speed
+            <span *ngIf="sort?.includes('speed')">{{ sort === 'speed' ? '▲' : '▼' }}</span>
+          </th>
         </tr>
       </thead>
+
       <tbody>
         <tr *ngFor="let r of data">
           <td>{{ r.id }}</td>
-          <td>{{ r.name }}</td>
+          <td>
+            <a [routerLink]="['/players', r.id]" style="text-decoration:none;">
+              {{ r.name }}
+            </a>
+          </td>
           <td>{{ r.club }}</td>
           <td>{{ r.position }}</td>
           <td>{{ r.nationality }}</td>
@@ -48,7 +77,7 @@
   <!-- Paginación -->
   <div style="display:flex; align-items:center; gap:.5rem; margin-top:.75rem;">
     <button (click)="prev()" [disabled]="page <= 1">Anterior</button>
-    <span>Página {{ page }} de {{ Math.max(1, Math.ceil(total / limit)) }}</span>
-    <button (click)="next()" [disabled]="page >= Math.ceil(total / limit)">Siguiente</button>
+    <span>Página {{ page }} de {{ totalPages }}</span>
+    <button (click)="next()" [disabled]="page >= totalPages">Siguiente</button>
   </div>
 </section>

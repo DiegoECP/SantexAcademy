@@ -4,6 +4,24 @@ import { PlayersQueryDto } from './dto/players-query.dto';
 import { PlayerDto } from './dto/player.dto';
 import { Parser as Json2CsvParser } from 'json2csv';
 
+// --- NUEVO: helper para parsear ?sort=name,-rating a un array tipado --- //
+type SortKey = 'name' | 'club' | 'nationality' | 'position' | 'rating' | 'speed';
+type OrderItem = [SortKey, 'ASC' | 'DESC'];
+
+function parseSort(sort?: string): OrderItem[] | undefined {
+  if (!sort) return undefined;
+  const allowed = new Set<SortKey>(['name','club','nationality','position','rating','speed']);
+  const tokens = sort.split(',').map(s => s.trim()).filter(Boolean);
+  const out: OrderItem[] = [];
+  for (const t of tokens) {
+    const dir: 'ASC' | 'DESC' = t.startsWith('-') ? 'DESC' : 'ASC';
+    const key = (t.startsWith('-') ? t.slice(1) : t) as SortKey;
+    if (allowed.has(key)) out.push([key, dir]);
+  }
+  return out.length ? out : undefined;
+}
+// ---------------------------------------------------------------------- //
+
 @Injectable()
 export class PlayersService {
   constructor(
@@ -21,13 +39,12 @@ export class PlayersService {
       { label: 'Shooting',  value: player.shooting ?? 0 },
       { label: 'Passing',   value: player.passing ?? 0 },
       { label: 'Dribbling', value: player.dribbling ?? 0 },
-      // si luego agregás Defense/Physical, los sumás acá
     ];
 
     return new PlayerDto({ ...player, radar });
   }
 
-  // Listado con filtros + paginación
+  // Listado con filtros + paginación + ORDENAMIENTO
   async list(q: PlayersQueryDto): Promise<{ items: PlayerDto[]; meta: any }> {
     const page = q.page ?? 1;
     const limit = q.limit ?? 10;
@@ -44,7 +61,7 @@ export class PlayersService {
       maxSpeed: q.maxSpeed,
       limit,
       offset,
-      // sin "order": cada repo decide (Sequelize: longName ASC)
+      order: parseSort(q.sort), // ← NUEVO: pasamos el orden al repo (en claves de dominio)
     };
 
     const { rows, count } = await this.playerRepository.findManyAndCount(filters);
@@ -58,9 +75,9 @@ export class PlayersService {
         totalPages: Math.ceil(count / limit) || 1,
       },
     };
-    }
+  }
 
-  // Export CSV con mismos filtros
+  // Export CSV con mismos filtros (y podés mantener o quitar "order" según prefieras)
   async exportCsv(q: PlayersQueryDto): Promise<string> {
     const limit = 100000; // grande para exportar
     const offset = 0;
@@ -76,6 +93,7 @@ export class PlayersService {
       maxSpeed: q.maxSpeed,
       limit,
       offset,
+      order: parseSort(q.sort), // opcional: exportar respetando el sort
     };
 
     const { rows } = await this.playerRepository.findManyAndCount(filters);

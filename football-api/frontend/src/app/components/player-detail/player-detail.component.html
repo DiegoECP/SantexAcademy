@@ -1,0 +1,27 @@
+<section style="max-width: 900px; margin: 1rem auto; padding: 1rem;">
+  <a routerLink="/players" style="text-decoration: none;">← Volver</a>
+
+  <div *ngIf="loading" style="margin-top: 1rem;">Cargando…</div>
+
+  <ng-container *ngIf="!loading && player">
+    <h1 style="font-size: 1.5rem; font-weight: 600; margin: .5rem 0;">
+      {{ player.name }} <small style="font-weight: 400;">({{ player.nationality }})</small>
+    </h1>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items:start;">
+      <div>
+        <p><strong>Club:</strong> {{ player.club }}</p>
+        <p><strong>Posición:</strong> {{ player.position }}</p>
+        <p><strong>Rating:</strong> {{ player.rating }}</p>
+        <p><strong>Speed:</strong> {{ player.speed }}</p>
+        <p><strong>Shooting:</strong> {{ player.shooting }}</p>
+        <p><strong>Passing:</strong> {{ player.passing }}</p>
+        <p><strong>Dribbling:</strong> {{ player.dribbling }}</p>
+      </div>
+
+      <div>
+        <canvas #radarCanvas aria-label="Radar de habilidades" role="img"></canvas>
+      </div>
+    </div>
+  </ng-container>
+</section>
