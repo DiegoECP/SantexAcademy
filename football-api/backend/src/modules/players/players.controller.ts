@@ -9,17 +9,17 @@ import {
   Query,
   UsePipes,
   ValidationPipe,
-  Header,
+  Header, Res,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { PlayersService } from './players.service';
 import { PlayerDto } from './dto/player.dto';
-import { PlayersQueryDto } from './dto/players-query.dto'; // <-- NUEVO
+import { PlayersQueryDto } from './dto/players-query.dto';
 
 @Controller('api/players')
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
-  // NUEVO: listado con filtros y paginación
   @Get()
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -31,16 +31,16 @@ export class PlayersController {
       meta: res.meta,
     };
   }
-  // NUEVO: exportar CSV
+
   @Get('export')
-  @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-  @Header('Content-Type', 'text/csv; charset=utf-8')
-  @Header('Content-Disposition', 'attachment; filename="players.csv"')
-  async exportCsv(@Query() query: PlayersQueryDto) {
-    return this.playersService.exportCsv(query); // retorna string CSV
+  @HttpCode(HttpStatus.OK)
+  async exportCsv(@Query() query: PlayersQueryDto, @Res() res: Response) {
+    const csv = await this.playersService.exportCsv(query);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="players.csv"');
+    return res.send(csv);
   }
 
-  // EXISTENTE: detalle por id (lo dejamos tal cual)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getPlayerById(@Param('id', ParseIntPipe) id: number): Promise<PlayerDto> {

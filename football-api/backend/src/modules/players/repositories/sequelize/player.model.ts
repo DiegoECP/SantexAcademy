@@ -55,273 +55,149 @@ export class PlayerModel extends Model<PlayerModel> {
   declare heightCm?: number;
 
   @Column({ field: 'weight_kg', type: DataType.INTEGER, allowNull: true })
-  weightKg?: number;
+  declare weightKg: number | null;
 
   @Column({ field: 'preferred_foot', type: DataType.STRING, allowNull: true })
-  preferredFoot?: string;
+  declare preferredFoot: string | null;
 
   @Column({ field: 'weak_foot', type: DataType.INTEGER, allowNull: true })
-  weakFoot?: number;
+  declare weakFoot: number | null;
 
   @Column({ field: 'skill_moves', type: DataType.INTEGER, allowNull: true })
-  skillMoves?: number;
+  declare skillMoves: number | null;
 
-  @Column({
-    field: 'international_reputation',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  internationalReputation?: number;
+  @Column({ field: 'international_reputation', type: DataType.INTEGER, allowNull: true, })
+  declare internationalReputation: number | null;
 
   @Column({ field: 'work_rate', type: DataType.STRING, allowNull: true })
-  workRate?: string;
+  declare workRate: string | null;
 
   @Column({ field: 'body_type', type: DataType.STRING, allowNull: true })
-  bodyType?: string;
+  declare bodyType: string | null;
 
   @Column({ type: DataType.INTEGER, allowNull: true })
-  pace?: number;
+  declare pace: number | null;
 
   @Column({ type: DataType.INTEGER, allowNull: true })
-  shooting?: number;
+  declare shooting: number | null;
 
   @Column({ type: DataType.INTEGER, allowNull: true })
-  passing?: number;
+  declare passing: number | null;
 
   @Column({ type: DataType.INTEGER, allowNull: true })
-  dribbling?: number;
+  declare dribbling: number | null;
 
   @Column({ type: DataType.INTEGER, allowNull: true })
-  defending?: number;
+  declare defending: number | null;
 
   @Column({ type: DataType.INTEGER, allowNull: true })
-  physic?: number;
+  declare physic: number | null;
 
-  @Column({
-    field: 'attacking_crossing',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  attackingCrossing?: number;
+  @Column({ field: 'attacking_crossing', type: DataType.INTEGER, allowNull: true })
+  declare attackingCrossing: number | null;
 
-  @Column({
-    field: 'attacking_finishing',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  attackingFinishing?: number;
+  @Column({ field: 'attacking_finishing', type: DataType.INTEGER, allowNull: true })
+  declare attackingFinishing: number | null;
 
-  @Column({
-    field: 'attacking_heading_accuracy',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  attackingHeadingAccuracy?: number;
+  @Column({ field: 'attacking_heading_accuracy', type: DataType.INTEGER, allowNull: true})
+  declare attackingHeadingAccuracy: number | null;
 
-  @Column({
-    field: 'attacking_short_passing',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  attackingShortPassing?: number;
+  @Column({ field: 'attacking_short_passing',  type: DataType.INTEGER, allowNull: true })
+  declare attackingShortPassing: number | null;
 
-  @Column({
-    field: 'attacking_volleys',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  attackingVolleys?: number;
+  @Column({ field: 'attacking_volleys', type: DataType.INTEGER, allowNull: true })
+  declare attackingVolleys: number | null;
 
   @Column({ field: 'skill_dribbling', type: DataType.INTEGER, allowNull: true })
-  skillDribbling?: number;
+  declare skillDribbling: number | null;
 
   @Column({ field: 'skill_curve', type: DataType.INTEGER, allowNull: true })
-  skillCurve?: number;
+  declare skillCurve: number | null;
 
-  @Column({
-    field: 'skill_fk_accuracy',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  skillFkAccuracy?: number;
+  @Column({ field: 'skill_fk_accuracy', type: DataType.INTEGER, allowNull: true })
+  declare skillFkAccuracy: number | null;
 
-  @Column({
-    field: 'skill_long_passing',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  skillLongPassing?: number;
+  @Column({ field: 'skill_long_passing', type: DataType.INTEGER, allowNull: true })
+  declare skillLongPassing: number | null;
 
-  @Column({
-    field: 'skill_ball_control',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  skillBallControl?: number;
+  @Column({ field: 'skill_ball_control', type: DataType.INTEGER, allowNull: true })
+  declare skillBallControl: number | null;
 
-  @Column({
-    field: 'movement_acceleration',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  movementAcceleration?: number;
+  @Column({ field: 'movement_acceleration', type: DataType.INTEGER, allowNull: true })
+  declare movementAcceleration: number | null;
 
-  @Column({
-    field: 'movement_sprint_speed',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  movementSprintSpeed?: number;
+  @Column({ field: 'movement_sprint_speed', type: DataType.INTEGER, allowNull: true })
+  declare movementSprintSpeed: number | null;
 
-  @Column({
-    field: 'movement_agility',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  movementAgility?: number;
+  @Column({ field: 'movement_agility', type: DataType.INTEGER, allowNull: true })
+  declare movementAgility: number | null;
 
-  @Column({
-    field: 'movement_reactions',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  movementReactions?: number;
+  @Column({ field: 'movement_reactions', type: DataType.INTEGER, allowNull: true })
+  declare movementReactions: number | null;
 
-  @Column({
-    field: 'movement_balance',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  movementBalance?: number;
+  @Column({ field: 'movement_balance', type: DataType.INTEGER, allowNull: true })
+  declare movementBalance: number | null;
 
-  @Column({
-    field: 'power_shot_power',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  powerShotPower?: number;
+  @Column({ field: 'power_shot_power', type: DataType.INTEGER, allowNull: true })
+  declare powerShotPower: number | null;
 
   @Column({ field: 'power_jumping', type: DataType.INTEGER, allowNull: true })
-  powerJumping?: number;
+  declare powerJumping: number | null;
 
   @Column({ field: 'power_stamina', type: DataType.INTEGER, allowNull: true })
-  powerStamina?: number;
+  declare powerStamina: number | null;
 
   @Column({ field: 'power_strength', type: DataType.INTEGER, allowNull: true })
-  powerStrength?: number;
+  declare powerStrength: number | null;
 
-  @Column({
-    field: 'power_long_shots',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  powerLongShots?: number;
+  @Column({ field: 'power_long_shots', type: DataType.INTEGER, allowNull: true })
+  declare powerLongShots: number | null;
 
-  @Column({
-    field: 'mentality_aggression',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  mentalityAggression?: number;
+  @Column({ field: 'mentality_aggression', type: DataType.INTEGER, allowNull: true })
+  declare mentalityAggression: number | null;
 
-  @Column({
-    field: 'mentality_interceptions',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  mentalityInterceptions?: number;
+  @Column({ field: 'mentality_interceptions', type: DataType.INTEGER, allowNull: true })
+  declare mentalityInterceptions: number | null;
 
-  @Column({
-    field: 'mentality_positioning',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  mentalityPositioning?: number;
+  @Column({ field: 'mentality_positioning', type: DataType.INTEGER, allowNull: true })
+  declare mentalityPositioning: number | null;
 
-  @Column({
-    field: 'mentality_vision',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  mentalityVision?: number;
+  @Column({ field: 'mentality_vision', type: DataType.INTEGER, allowNull: true })
+  declare mentalityVision: number | null;
 
-  @Column({
-    field: 'mentality_penalties',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  mentalityPenalties?: number;
+  @Column({ field: 'mentality_penalties', type: DataType.INTEGER, allowNull: true })
+  declare mentalityPenalties: number | null;
 
-  @Column({
-    field: 'mentality_composure',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  mentalityComposure?: number;
+  @Column({ field: 'mentality_composure', type: DataType.INTEGER, allowNull: true })
+  declare mentalityComposure: number | null;
 
-  @Column({
-    field: 'defending_marking',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  defendingMarking?: number;
+  @Column({ field: 'defending_marking', type: DataType.INTEGER, allowNull: true })
+  declare defendingMarking: number | null;
 
-  @Column({
-    field: 'defending_standing_tackle',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  defendingStandingTackle?: number;
+  @Column({ field: 'defending_standing_tackle', type: DataType.INTEGER, allowNull: true })
+  declare defendingStandingTackle: number | null;
 
-  @Column({
-    field: 'defending_sliding_tackle',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  defendingSlidingTackle?: number;
+  @Column({ field: 'defending_sliding_tackle', type: DataType.INTEGER, allowNull: true })
+  declare defendingSlidingTackle: number | null;
 
-  @Column({
-    field: 'goalkeeping_diving',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  goalkeepingDiving?: number;
+  @Column({ field: 'goalkeeping_diving', type: DataType.INTEGER, allowNull: true })
+  declare goalkeepingDiving: number | null;
 
-  @Column({
-    field: 'goalkeeping_handling',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  goalkeepingHandling?: number;
+  @Column({ field: 'goalkeeping_handling', type: DataType.INTEGER, allowNull: true })
+  declare goalkeepingHandling: number | null;
 
-  @Column({
-    field: 'goalkeeping_kicking',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  goalkeepingKicking?: number;
+  @Column({ field: 'goalkeeping_kicking', type: DataType.INTEGER, allowNull: true })
+  declare goalkeepingKicking: number | null;
 
-  @Column({
-    field: 'goalkeeping_positioning',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  goalkeepingPositioning?: number;
+  @Column({ field: 'goalkeeping_positioning', type: DataType.INTEGER, allowNull: true })
+  declare goalkeepingPositioning: number | null;
 
-  @Column({
-    field: 'goalkeeping_reflexes',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  goalkeepingReflexes?: number;
+  @Column({ field: 'goalkeeping_reflexes', type: DataType.INTEGER, allowNull: true })
+  declare goalkeepingReflexes: number | null;
 
-  @Column({
-    field: 'goalkeeping_speed',
-    type: DataType.INTEGER,
-    allowNull: true,
-  })
-  goalkeepingSpeed?: number;
+  @Column({ field: 'goalkeeping_speed', type: DataType.INTEGER, allowNull: true })
+  declare goalkeepingSpeed: number | null;
 
   @Column({ field: 'player_traits', type: DataType.STRING, allowNull: true })
-  playerTraits?: string;
+  declare playerTraits: string | null;
 }

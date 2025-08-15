@@ -74,6 +74,16 @@
     </table>
   </div>
 
+  <div style="display:flex; align-items:center; gap:.5rem; margin-top:.75rem;">
+    <button (click)="prev()" [disabled]="page <= 1">Anterior</button>
+    <span>Página {{ page }} de {{ totalPages }}</span>
+    <button (click)="next()" [disabled]="page >= totalPages">Siguiente</button>
+
+    <span style="flex:1"></span>
+
+    <button (click)="export()">Exportar CSV</button>
+  </div>
+
   <!-- Paginación -->
   <div style="display:flex; align-items:center; gap:.5rem; margin-top:.75rem;">
     <button (click)="prev()" [disabled]="page <= 1">Anterior</button>

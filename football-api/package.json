@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@angular/common": "^20.1.7",
+    "@angular/forms": "^20.1.7",
+    "@angular/router": "^20.1.7",
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/sequelize": "^11.0.0",
+    "@types/express": "^5.0.3",
+    "chart.js": "^4.5.0",
+    "express": "^5.1.0",
+    "json2csv": "^6.0.0-alpha.2",
+    "sequelize": "^6.37.7",
+    "sequelize-typescript": "^2.1.6"
+  },
+  "devDependencies": {
+    "@types/chart.js": "^2.9.41",
+    "@types/json2csv": "^5.0.7",
+    "@types/sequelize": "^4.28.20"
+  }
+}

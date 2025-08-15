@@ -12,7 +12,6 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule],
   templateUrl: './players-list.component.html',
 })
-
 export class PlayersListComponent implements OnInit, OnDestroy {
   data: Player[] = [];
   total = 0;
@@ -21,11 +20,12 @@ export class PlayersListComponent implements OnInit, OnDestroy {
   loading = false;
 
   private destroy$ = new Subject<void>();
+  sort?: string; // 'name' | '-rating' | 'name,-rating'
 
   form!: ReturnType<FormBuilder['group']>;
 
   constructor(private fb: FormBuilder, private players: PlayersService) {
-      this.form = this.fb.group({
+    this.form = this.fb.group({
       name: [''],
       club: [''],
       nationality: [''],
@@ -98,21 +98,47 @@ export class PlayersListComponent implements OnInit, OnDestroy {
   }
 
   get totalPages(): number {
-  return Math.max(1, Math.ceil(this.total / this.limit));
+    return Math.max(1, Math.ceil(this.total / this.limit));
   }
-
-  sort?: string; // ejemplos: 'name' | '-rating' | 'name,-rating'
 
   toggleSort(field: 'name' | 'club' | 'nationality' | 'position' | 'rating' | 'speed') {
     if (!this.sort || !this.sort.includes(field)) {
-      this.sort = field;           // asc
+      this.sort = field; // asc
     } else if (this.sort === field) {
-      this.sort = `-${field}`;     // desc
+      this.sort = `-${field}`; // desc
     } else {
-      this.sort = undefined;       // sin orden
+      this.sort = undefined; // sin orden
     }
     this.page = 1;
     this.fetch().subscribe();
   }
 
+  /** Descargar CSV con los filtros/orden actuales */
+  export() {
+    const v = this.form.value;
+
+    this.players
+      .export({
+        // para export no necesitamos paginar, el back usa un tope alto
+        name: v.name || undefined,
+        club: v.club || undefined,
+        nationality: v.nationality || undefined,
+        position: v.position || undefined,
+        minRating: v.minRating ? Number(v.minRating) : undefined,
+        maxRating: v.maxRating ? Number(v.maxRating) : undefined,
+        minSpeed: v.minSpeed ? Number(v.minSpeed) : undefined,
+        maxSpeed: v.maxSpeed ? Number(v.maxSpeed) : undefined,
+        sort: this.sort,
+      })
+      .subscribe((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'players.csv';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+  }
 }

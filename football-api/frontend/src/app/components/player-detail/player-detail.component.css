@@ -1,0 +1,42 @@
+.detail-wrap {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 1rem;
+}
+
+.back-link {
+  text-decoration: none;
+}
+
+.status { margin-top: 1rem; }
+.status.error { color: #b00020; }
+
+.title { font-size: 1.5rem; font-weight: 600; margin: .5rem 0; }
+.title small { font-weight: 400; }
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.facts p { margin: .25rem 0; }
+
+/* Contenedor con altura para que el radar no colapse */
+.chart-wrap {
+  height: 360px;
+  position: relative;
+}
+
+/* El canvas debe ocupar todo el contenedor */
+.chart-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 720px) {
+  .grid { grid-template-columns: 1fr; }
+  .chart-wrap { height: 300px; }
+}

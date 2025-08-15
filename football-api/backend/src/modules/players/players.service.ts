@@ -4,14 +4,14 @@ import { PlayersQueryDto } from './dto/players-query.dto';
 import { PlayerDto } from './dto/player.dto';
 import { Parser as Json2CsvParser } from 'json2csv';
 
-// --- NUEVO: helper para parsear ?sort=name,-rating a un array tipado --- //
+// --- Helper: parsear ?sort=name,-rating a array tipado --- //
 type SortKey = 'name' | 'club' | 'nationality' | 'position' | 'rating' | 'speed';
 type OrderItem = [SortKey, 'ASC' | 'DESC'];
 
 function parseSort(sort?: string): OrderItem[] | undefined {
   if (!sort) return undefined;
-  const allowed = new Set<SortKey>(['name','club','nationality','position','rating','speed']);
-  const tokens = sort.split(',').map(s => s.trim()).filter(Boolean);
+  const allowed = new Set<SortKey>(['name', 'club', 'nationality', 'position', 'rating', 'speed']);
+  const tokens = sort.split(',').map((s) => s.trim()).filter(Boolean);
   const out: OrderItem[] = [];
   for (const t of tokens) {
     const dir: 'ASC' | 'DESC' = t.startsWith('-') ? 'DESC' : 'ASC';
@@ -20,7 +20,12 @@ function parseSort(sort?: string): OrderItem[] | undefined {
   }
   return out.length ? out : undefined;
 }
-// ---------------------------------------------------------------------- //
+
+// --- Helper: normalizar a número (evita null/undefined/NaN) --- //
+const num = (v: unknown): number => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+};
 
 @Injectable()
 export class PlayersService {
@@ -29,22 +34,31 @@ export class PlayersService {
     private readonly playerRepository: IPlayerRepository,
   ) {}
 
-  // Detalle + radar
+  // Detalle + radar (con números siempre válidos)
   async getPlayerById(id: number): Promise<PlayerDto | undefined> {
     const player = await this.playerRepository.findOneById(id);
     if (!player) return undefined;
 
     const radar = [
-      { label: 'Speed',     value: player.speed ?? 0 },
-      { label: 'Shooting',  value: player.shooting ?? 0 },
-      { label: 'Passing',   value: player.passing ?? 0 },
-      { label: 'Dribbling', value: player.dribbling ?? 0 },
+      { label: 'Speed',     value: num((player as any).speed) },
+      { label: 'Shooting',  value: num((player as any).shooting) },
+      { label: 'Passing',   value: num((player as any).passing) },
+      { label: 'Dribbling', value: num((player as any).dribbling) },
     ];
 
-    return new PlayerDto({ ...player, radar });
+    // además normalizamos las props numéricas del DTO
+    return new PlayerDto({
+      ...player,
+      speed:     num((player as any).speed),
+      shooting:  num((player as any).shooting),
+      passing:   num((player as any).passing),
+      dribbling: num((player as any).dribbling),
+      rating:    num((player as any).rating),
+      radar,
+    });
   }
 
-  // Listado con filtros + paginación + ORDENAMIENTO
+  // Listado con filtros + paginación + ordenamiento
   async list(q: PlayersQueryDto): Promise<{ items: PlayerDto[]; meta: any }> {
     const page = q.page ?? 1;
     const limit = q.limit ?? 10;
@@ -61,13 +75,22 @@ export class PlayersService {
       maxSpeed: q.maxSpeed,
       limit,
       offset,
-      order: parseSort(q.sort), // ← NUEVO: pasamos el orden al repo (en claves de dominio)
+      order: parseSort(q.sort),
     };
 
     const { rows, count } = await this.playerRepository.findManyAndCount(filters);
 
     return {
-      items: rows.map((p) => new PlayerDto(p)),
+      items: rows.map((p) =>
+        new PlayerDto({
+          ...p,
+          speed:     num((p as any).speed),
+          shooting:  num((p as any).shooting),
+          passing:   num((p as any).passing),
+          dribbling: num((p as any).dribbling),
+          rating:    num((p as any).rating),
+        }),
+      ),
       meta: {
         total: count,
         page,
@@ -77,9 +100,9 @@ export class PlayersService {
     };
   }
 
-  // Export CSV con mismos filtros (y podés mantener o quitar "order" según prefieras)
+  // Export CSV con mismos filtros (respetando sort)
   async exportCsv(q: PlayersQueryDto): Promise<string> {
-    const limit = 100000; // grande para exportar
+    const limit = 100000;
     const offset = 0;
 
     const filters: PlayersListFilters = {
@@ -93,11 +116,20 @@ export class PlayersService {
       maxSpeed: q.maxSpeed,
       limit,
       offset,
-      order: parseSort(q.sort), // opcional: exportar respetando el sort
+      order: parseSort(q.sort),
     };
 
     const { rows } = await this.playerRepository.findManyAndCount(filters);
-    const data = rows.map((p) => new PlayerDto(p));
+    const data = rows.map((p) =>
+      new PlayerDto({
+        ...p,
+        speed:     num((p as any).speed),
+        shooting:  num((p as any).shooting),
+        passing:   num((p as any).passing),
+        dribbling: num((p as any).dribbling),
+        rating:    num((p as any).rating),
+      }),
+    );
 
     const fields = [
       'id',
